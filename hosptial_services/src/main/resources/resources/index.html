@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hospital Service</title>
+  <script>
+    async function getPatients() {
+      try {
+        let res = await fetch("/api/hospital/patients");
+        let data = await res.text();
+        alert("Patients: " + data);
+      } catch (err) {
+        alert("Error fetching patients: " + err);
+      }
+    }
+
+    async function getDoctors() {
+      try {
+        let res = await fetch("/api/hospital/doctors");
+        let data = await res.text();
+        alert("Doctors: " + data);
+      } catch (err) {
+        alert("Error fetching doctors: " + err);
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1>Hospital Service</h1>
+  <button onclick="getPatients()">Get Patients</button>
+  <button onclick="getDoctors()">Get Doctors</button>
+</body>
+</html>

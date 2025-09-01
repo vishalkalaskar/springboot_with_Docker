@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  hospital-service:
+    build: .
+    container_name: hospital-container
+    ports:
+      - "8083:8083"
+    depends_on:
+      - patient-service
+      - doctor-service
+
+  patient-service:
+    image: patient-services   # use the image you already built
+    container_name: patient-container
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/patientdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: vishal123
+
+  doctor-service:
+    image: doc-services   # use the image you already built
+    container_name: doctor-container
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/doctordb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: vishal123

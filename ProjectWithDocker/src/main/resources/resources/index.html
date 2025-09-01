@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spring Boot – Welcome</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%2309f'/><text x='50' y='60' text-anchor='middle' font-size='56' fill='white' font-family='Arial'>S</text></svg>">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #101830;
+      --text: #eaf0ff;
+      --muted: #a9b2c7;
+      --brand: #4f8cff;
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --err: #ef4444;
+      --border: #22304f;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+      background: radial-gradient(1200px 600px at 80% -10%, #182143 0%, transparent 60%), var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    header {
+      padding: 24px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; backdrop-filter: blur(6px);
+      background: color-mix(in oklab, var(--bg), transparent 70%);
+    }
+    .brand { display:flex; align-items:center; gap:12px; font-weight: 700; }
+    .badge { border:1px solid var(--border); padding:4px 8px; border-radius:999px; font-size:12px; color:var(--muted); }
+    main { max-width: 1000px; margin: 32px auto; padding: 0 20px; }
+    .grid { display:grid; gap:16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .card { background: linear-gradient(180deg, color-mix(in oklab, var(--card), transparent 10%), var(--card)); border:1px solid var(--border); border-radius: 18px; padding: 18px; box-shadow: 0 10px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.02); }
+    .title { font-size: 20px; margin: 0 0 8px; }
+    .muted { color: var(--muted); font-size: 14px; }
+    .row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; }
+    button, input, select { font: inherit; color: inherit; }
+    button { cursor:pointer; border:1px solid var(--border); padding:10px 14px; border-radius:12px; background: color-mix(in oklab, var(--card), white 3%); }
+    button.primary { border-color: color-mix(in oklab, var(--brand), black 40%); background: linear-gradient(180deg, color-mix(in oklab, var(--brand), white 10%), var(--brand)); color: white; }
+    button:disabled { opacity:.6; cursor:not-allowed; }
+    input[type="text"] { background: #0e1530; border:1px solid var(--border); border-radius:12px; padding:10px 12px; width:100%; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+    pre { background: #0a1128; border:1px solid var(--border); border-radius: 14px; padding: 14px; overflow:auto; max-height: 320px; }
+    .status-dot { width:10px; height:10px; border-radius:999px; display:inline-block; margin-right:8px; }
+    .ok { background: var(--ok); }
+    .warn { background: var(--warn); }
+    .err { background: var(--err); }
+    footer { margin: 40px 0 24px; text-align: center; color: var(--muted); font-size: 13px; }
+    a { color: var(--brand); text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M12 2l8.66 5v10L12 22l-8.66-5V7L12 2z" stroke="#4f8cff" stroke-width="1.5"/><path d="M12 7l5 3v4l-5 3-5-3V10l5-3z" fill="#4f8cff" opacity=".25"/></svg>
+      <span>Spring Boot App</span>
+      <span class="badge">Docker Ready</span>
+    </div>
+    <nav class="row">
+      <a class="muted" href="/actuator" target="_blank" rel="noreferrer">Actuator</a>
+      <a class="muted" href="/swagger-ui/index.html" target="_blank" rel="noreferrer">Swagger</a>
+      <a class="muted" href="/api" target="_blank" rel="noreferrer">/api</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="grid" aria-label="Quick actions">
+      <article class="card">
+        <h2 class="title">Health Check</h2>
+        <p class="muted">Pings <code>/actuator/health</code> and shows status.</p>
+        <div class="controls" style="margin-top: 10px;">
+          <button class="primary" id="btnHealth">Check Health</button>
+          <span id="healthStatus" class="muted">—</span>
+        </div>
+        <pre id="healthOutput" hidden></pre>
+      </article>
+
+      <article class="card">
+        <h2 class="title">Call Sample API</h2>
+        <p class="muted">GET any relative path (e.g. <code>/api/hello</code>).</p>
+        <div class="row" style="margin-top: 10px;">
+          <input id="apiPath" type="text" value="/api/hello" placeholder="/api/hello" aria-label="API path" />
+          <button id="btnCall">Send</button>
+        </div>
+        <pre id="apiOutput" hidden></pre>
+      </article>
+
+      <article class="card">
+        <h2 class="title">Container Info</h2>
+        <p class="muted">Use this blueprint when running in Docker:</p>
+        <pre><code># Build jar
+mvn -DskipTests clean package
+
+# Build image (Dockerfile in project root)
+docker build -t myorg/myapp:latest .
+
+# Run container mapping port 8080
+docker run -d -p 8080:8080 --name myapp myorg/myapp:latest
+
+# Or with Spring Boot buildpacks (no Dockerfile)
+./mvnw spring-boot:build-image -DskipTests \
+  -Dspring-boot.build-image.imageName=myorg/myapp:latest</code></pre>
+      </article>
+
+      <article class="card">
+        <h2 class="title">Configuration Hints</h2>
+        <ul class="muted" style="margin-top: 4px; padding-left: 18px;">
+          <li>Place this file at <code>src/main/resources/static/index.html</code>.</li>
+          <li>Expose the app port in Docker: <code>EXPOSE 8080</code>.</li>
+          <li>For prod, set <code>server.port</code> via env: <code>-e SERVER_PORT=8080</code>.</li>
+          <li>Wire DB via env vars (e.g., <code>SPRING_DATASOURCE_URL</code>).</li>
+          <li>Enable actuator in <code>application.yml</code> to use links above.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="card" style="margin-top:16px;">
+      <h2 class="title">Quick Start Checklist</h2>
+      <ol class="muted" style="padding-left: 18px;">
+        <li>Ensure the app builds a fat jar: <code>target/*.jar</code> or <code>build/libs/*.jar</code>.</li>
+        <li>Add <code>Dockerfile</code> at project root (or use Spring Boot buildpacks).</li>
+        <li>Run the container and open <a href="/" aria-label="home">http://localhost:8080</a>.</li>
+        <li>Health and API tests above should respond if endpoints exist.</li>
+      </ol>
+    </section>
+
+    <footer>
+      <span>Made with Spring Boot • Served as static content</span>
+    </footer>
+  </main>
+
+  <script>
+    const elBtnHealth = document.getElementById('btnHealth');
+    const elHealthStatus = document.getElementById('healthStatus');
+    const elHealthOutput = document.getElementById('healthOutput');
+
+    const elApiPath = document.getElementById('apiPath');
+    const elBtnCall = document.getElementById('btnCall');
+    const elApiOutput = document.getElementById('apiOutput');
+
+    function setStatus(el, ok, message) {
+      const dot = `<span class="status-dot ${ok ? 'ok' : 'err'}"></span>`;
+      el.innerHTML = dot + (message || (ok ? 'UP' : 'DOWN'));
+    }
+
+    async function fetchJson(path) {
+      const res = await fetch(path, { headers: { 'Accept': 'application/json' } });
+      const text = await res.text();
+      try { return { ok: res.ok, json: JSON.parse(text), raw: text }; }
+      catch { return { ok: res.ok, json: null, raw: text }; }
+    }
+
+    elBtnHealth?.addEventListener('click', async () => {
+      elBtnHealth.disabled = true; setStatus(elHealthStatus, true, 'Checking…');
+      try {
+        const { ok, json, raw } = await fetchJson('/actuator/health');
+        setStatus(elHealthStatus, ok, ok ? 'UP' : 'DOWN');
+        elHealthOutput.textContent = json ? JSON.stringify(json, null, 2) : raw;
+        elHealthOutput.hidden = false;
+      } catch (e) {
+        setStatus(elHealthStatus, false, 'Error');
+        elHealthOutput.textContent = String(e);
+        elHealthOutput.hidden = false;
+      } finally { elBtnHealth.disabled = false; }
+    });
+
+    elBtnCall?.addEventListener('click', async () => {
+      const path = (elApiPath.value || '').trim();
+      if (!path.startsWith('/')) { alert('Use a relative path starting with /'); return; }
+      elBtnCall.disabled = true; elApiOutput.hidden = true; elApiOutput.textContent = '';
+      try {
+        const { ok, json, raw } = await fetchJson(path);
+        elApiOutput.textContent = json ? JSON.stringify(json, null, 2) : raw;
+        elApiOutput.hidden = false;
+      } catch (e) {
+        elApiOutput.textContent = String(e);
+        elApiOutput.hidden = false;
+      } finally { elBtnCall.disabled = false; }
+    });
+  </script>
+
+  <!--
+    Notes:
+    - If you use Spring Security, permit access to static resources and the endpoints you test here.
+    - Actuator endpoints may need to be enabled in application.yml:
+        management:
+          endpoints:
+            web:
+              exposure:
+                include: health,info
+    - Place this file at src/main/resources/static/index.html (no controller needed).
+  -->
+</body>
+</html>
