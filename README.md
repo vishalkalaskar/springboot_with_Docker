@@ -13,7 +13,7 @@
   - Docker build process go that path where your project is located or in sts go terminal.
       - ex. C:\Users\Vishal\Documents\workspace-spring-tool-suite-4-4.27.0.RELEASE\ProjectWithDocker>
   - heat this command
-        - docker build -t  project1docer .
+        - docker build -t  project1docer.
         - docker run -d -p 8080:8080  project1docer 
         - docker ps  or ps -a //runing and not running.
         - docker start /stop 
